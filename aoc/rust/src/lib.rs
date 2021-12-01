@@ -45,7 +45,7 @@ pub mod aoc_util {
         };
     }
 
-    pub fn run_puzzles(to_run: Vec<usize>) -> Vec<[(Duration, String); 2]> {
+    pub fn run_puzzles(to_run: &Vec<usize>) -> Vec<[(Duration, String); 2]> {
         use crate::days;
 
         let days: Vec<(
@@ -58,12 +58,16 @@ pub mod aoc_util {
         for d in to_run {
             let day = days.get(d - 1);
             if let None = day {
+                out.push([
+                    (Duration::ZERO, "Not found".to_string()),
+                    (Duration::ZERO, "Not found".to_string()),
+                ]);
                 continue;
             }
 
             let (p1, p2) = day.unwrap();
 
-            let input = aoc_util::get_data(d);
+            let input = aoc_util::get_data(*d);
 
             if let Err(r) = input {
                 println!("Failed to get input for day {}: {}", d, r);

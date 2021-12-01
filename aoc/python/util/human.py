@@ -43,13 +43,10 @@ def humanise_time(nanos: int) -> str:
     return time.strip()
 
 
-_P = ParamSpec('_P')
 _T = TypeVar('_T')
 
-# mypy doesnt like this just yet
 
-
-def time_call(f: Callable[_P, _T], *args: '_P.args', **kwargs: '_P.kwargs') -> Tuple[str, _T]:  # type: ignore
+def time_call(f: Callable[..., _T], *args, **kwargs) -> Tuple[str, _T]:  # type: ignore
     start = time.monotonic_ns()
     res = f(*args, **kwargs)
     end = time.monotonic_ns()

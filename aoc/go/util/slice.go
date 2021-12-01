@@ -2,6 +2,7 @@ package util
 
 import (
 	"constraints"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -66,4 +67,40 @@ func Zip[T any](a, b []T) [][]T {
 	}
 
 	return out
+}
+
+type Comparable interface {
+	constraints.Complex | constraints.Ordered
+}
+
+func Index[T Comparable](slice []T, value T) int {
+	for i, v := range slice {
+		if v == value {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func IndexFunc[T any](slice []T, value T, eq func(T, T) bool) int {
+	for i, v := range slice {
+		if eq(v, value) {
+			return i
+		}
+	}
+
+	return -1
+}
+
+func Contains[T Comparable](slice []T, value T) bool {
+	return Index(slice, value) != -1
+}
+
+func ContainsFunc[T any](slice []T, value T, eq func(T, T) bool) bool {
+	return IndexFunc(slice, value, eq) != -1
+}
+
+func ReflectCompare[T any](a, b T) bool {
+	return reflect.DeepEqual(a, b)
 }
