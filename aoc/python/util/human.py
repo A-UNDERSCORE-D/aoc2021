@@ -1,3 +1,7 @@
+from typing import Callable, ParamSpec, Tuple, TypeVar
+import time
+
+
 NANOSECOND = 1
 MICROSECOND = NANOSECOND * 1000
 MILLISECOND = MICROSECOND * 1000
@@ -36,6 +40,18 @@ def humanise_time(nanos: int) -> str:
         nanos = remainder
 
     return time
+
+
+_P = ParamSpec('_P')
+_T = TypeVar('_T')
+
+
+def time_call(f: Callable[_P, _T], *args: '_P.args', **kwargs: '_P.kwargs') -> Tuple[str, _T]:  # type: ignore
+    start = time.monotonic_ns()
+    res = f(*args, **kwargs)
+    end = time.monotonic_ns()
+
+    return (humanise_time(end - start), res)
 
 
 if __name__ == '__main__':

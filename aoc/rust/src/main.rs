@@ -12,13 +12,14 @@ fn main() {
     let all_requested = args.iter().any(|x| x == "all");
 
     if date.day() <= 25 && date.month() == 12 && args.len() == 1 {
-        println!("{}", args.len());
+        println!("Running todays... ");
         to_run = vec![date.day().try_into().unwrap()]
     } else if all_requested || args.len() == 1 {
         println!("Running all...");
         to_run = (1..25).collect()
     } else {
-        to_run = args.iter().flat_map(|x| x.parse()).collect()
+        to_run = args.iter().flat_map(|x| x.parse()).collect();
+        println!("Running {:?}", to_run)
     }
 
     let results = run_puzzles(to_run);

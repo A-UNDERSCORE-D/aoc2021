@@ -1,5 +1,3 @@
-import time
-
 from util.lists import clump
 
 
@@ -45,14 +43,11 @@ example = """199
 263"""
 
 if __name__ == '__main__':
-    from util.human import humanise_time
+    from util.human import time_call
     input = open("./aoc/input/01.input").read()
-    t = time.monotonic_ns()
-    res = part_1(input)
-    end = time.monotonic_ns()
-    print(f'Part 1: {res}, {humanise_time(end-t)}')
 
-    t = time.monotonic_ns()
-    res = part_2(input)
-    end = time.monotonic_ns()
-    print(f'Part 2: {res}, {humanise_time(end-t)}')
+    time, res = time_call(part_1, input)
+    print(f'Part 1: {res}, {time}')
+
+    time, res = time_call(part_2, input)
+    print(f'Part 2: {res}, {time}')
