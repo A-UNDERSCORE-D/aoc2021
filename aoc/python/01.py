@@ -45,13 +45,14 @@ example = """199
 263"""
 
 if __name__ == '__main__':
-    t = time.time()
-    res = part_1(open("./aoc/input/01.input").read())
-    end = time.time()
-    print(f'Part 1: {res}, {end-t}')
+    from util.human import humanise_time
+    input = open("./aoc/input/01.input").read()
+    t = time.monotonic_ns()
+    res = part_1(input)
+    end = time.monotonic_ns()
+    print(f'Part 1: {res}, {humanise_time(end-t)}')
 
-    t = time.time()
-    res = part_2(open("./aoc/input/01.input").read())
-    # res = part_2(example)
-    end = time.time()
-    print(f'Part 2: {res}, {end-t}')
+    t = time.monotonic_ns()
+    res = part_2(input)
+    end = time.monotonic_ns()
+    print(f'Part 2: {res}, {humanise_time(end-t)}')
