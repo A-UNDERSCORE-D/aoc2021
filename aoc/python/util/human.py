@@ -16,7 +16,7 @@ TIME_LUT = {
     HOUR:           'h',
     MINUTE:         'm',
     SECOND:         's',
-    MILLISECOND:     'ms',
+    MILLISECOND:    'ms',
     MICROSECOND:    'µs',
     NANOSECOND:     'ns',
 }
@@ -35,15 +35,18 @@ def humanise_time(nanos: int) -> str:
     for division, name in TIME_LUT.items():
         n, remainder = divmod(nanos, division)
         if n > 0 and n - 1 > 0.001:
-            time += f'{n}{name}'
+            time += f'{n}.{remainder}{name}'
+            break
 
         nanos = remainder
 
-    return time
+    return time.strip()
 
 
 _P = ParamSpec('_P')
 _T = TypeVar('_T')
+
+# mypy doesnt like this just yet
 
 
 def time_call(f: Callable[_P, _T], *args: '_P.args', **kwargs: '_P.kwargs') -> Tuple[str, _T]:  # type: ignore

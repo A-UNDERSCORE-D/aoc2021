@@ -27,7 +27,7 @@ fn main() {
     for (day, result) in results.iter().enumerate() {
         let day = day + 1;
         let ((p1_time, p1_res), (p2_time, p2_res)) = (&result[0], &result[1]);
-        println!("Day {:02} Part 1: {} ({:#?})", day, p1_res, p1_time);
-        println!("Day {:02} Part 2: {} ({:#?})", day, p2_res, p2_time);
+        println!("Day {:02}: Part 1: {} ({:#?})", day, p1_res, p1_time);
+        println!("Day {:02}: Part 2: {} ({:#?})", day, p2_res, p2_time);
     }
 }

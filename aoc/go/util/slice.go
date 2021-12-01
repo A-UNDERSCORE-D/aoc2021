@@ -36,10 +36,6 @@ func Window[T any](slice []T, n int) [][]T {
 	return out
 }
 
-type Numeric interface {
-	int | int8 | int32 | int64 | uint8 | uint16 | uint32 | uint64
-}
-
 func Sum[T constraints.Integer](nums []T) T {
 	var out T
 	for _, v := range nums {

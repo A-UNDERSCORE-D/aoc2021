@@ -32,6 +32,6 @@ func main() {
 		t2, res2 := timeRun(s[1], input)
 
 		fmt.Printf("Day %02d: Part 1: %s (%s)\n", i+1, res1, t1)
-		fmt.Printf("Day %02d: Part 1: %s (%s)\n", i+1, res2, t2)
+		fmt.Printf("Day %02d: Part 2: %s (%s)\n", i+1, res2, t2)
 	}
 }
