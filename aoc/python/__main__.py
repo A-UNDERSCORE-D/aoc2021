@@ -1,5 +1,6 @@
 from . import one
 from .util.human import time_call
+from typing import List
 import sys
 
 import datetime
@@ -14,7 +15,7 @@ def december_day() -> bool:
     return now.day <= 25 and now.month == 12
 
 
-def parse_args(args: list[str]) -> list[int]:
+def parse_args(args: List[str]) -> List[int]:
     if 'all' in args or (len(args) == 1 and not december_day()):
         return list(range(1, 26))
 

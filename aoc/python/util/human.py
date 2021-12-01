@@ -1,4 +1,4 @@
-from typing import Callable, ParamSpec, Tuple, TypeVar
+from typing import Callable, Tuple, TypeVar
 import time
 
 
