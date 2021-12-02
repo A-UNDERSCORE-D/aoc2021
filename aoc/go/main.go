@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/one"
+	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/two"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/util"
 )
 
@@ -18,6 +19,7 @@ func makeString[T any](f func(string) T) func(string) string {
 
 var SOLUTIONS = [][2]func(string) string{
 	{makeString(one.Solve1), makeString(one.Solve2)},
+	{makeString(two.Solve1), makeString(two.Solve2)},
 }
 
 func timeRun(f func(string) string, s string) (time.Duration, string) {
