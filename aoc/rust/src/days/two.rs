@@ -65,7 +65,7 @@ pub fn part_2(input: &String) -> i64 {
         sub.r#move(
             split.next().unwrap(),
             split.next().unwrap().parse().unwrap(),
-            true,
+            false,
         )
     }
 
