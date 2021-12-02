@@ -1,5 +1,6 @@
 pub mod days {
     pub mod one;
+    pub mod two;
 }
 
 pub mod aoc_util {
@@ -51,7 +52,7 @@ pub mod aoc_util {
         let days: Vec<(
             &'static dyn Fn(&String) -> String,
             &'static dyn Fn(&String) -> String,
-        )> = vec![day_str!(one)];
+        )> = vec![day_str!(one), day_str!(two)];
 
         let mut out = Vec::<[(Duration, String); 2]>::new();
 
