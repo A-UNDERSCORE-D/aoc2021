@@ -1,4 +1,4 @@
-from . import one, two
+from . import one, two, three
 from .util.human import time_call
 from typing import List
 import sys
@@ -7,6 +7,7 @@ import datetime
 TO_RUN = (
     (one.part_1, one.part_2),
     (two.part_1, two.part_2),
+    (three.part_1, three.part_2),
 )
 
 
