@@ -104,3 +104,57 @@ func ContainsFunc[T any](slice []T, value T, eq func(T, T) bool) bool {
 func ReflectCompare[T any](a, b T) bool {
 	return reflect.DeepEqual(a, b)
 }
+
+func All[T any](slice []T, pred func(T) bool) bool {
+	for _, v := range slice {
+		if !pred(v) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func Any[T any](slice []T, pred func(T) bool) bool {
+	for _, v := range slice {
+		if pred(v) {
+			return true
+		}
+	}
+	return false
+}
+
+func Map[T any, U any](slice []T, pred func(T) U) []U {
+	out := make([]U, 0, len(slice))
+	for _, v := range slice {
+		out = append(out, pred(v))
+	}
+
+	return out
+}
+
+func Filter[T any](slice []T, pred func(T) bool) []T {
+	out := make([]T, 0, len(slice))
+	for _, v := range slice {
+		if pred(v) {
+			out = append(out, v)
+		}
+	}
+
+	return out
+}
+
+func Chain[T any](slices ...[]T) []T {
+	l := 0
+	for _, v := range slices {
+		l += len(v)
+	}
+
+	out := make([]T, 0, l)
+
+	for _, s := range slices {
+		out = append(out, s...)
+	}
+
+	return out
+}

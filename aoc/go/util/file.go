@@ -3,6 +3,7 @@ package util
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 func GetInput(day int) string {
@@ -12,4 +13,8 @@ func GetInput(day int) string {
 	}
 
 	return string(res)
+}
+
+func SectionedInput(input string) []string {
+	return strings.Split(input, "\n\n")
 }
