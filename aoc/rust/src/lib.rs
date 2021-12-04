@@ -1,6 +1,9 @@
+#[rustfmt::skip]
 pub mod days {
     pub mod one;
     pub mod two;
+    pub mod three;
+    pub mod four;
 }
 
 pub mod aoc_util {
@@ -10,6 +13,7 @@ pub mod aoc_util {
     };
 
     use crate::aoc_util;
+    use num;
 
     pub fn get_data(day: usize) -> io::Result<String> {
         fs::read_to_string(format!("../input/{:02}.input", day))
@@ -19,8 +23,18 @@ pub mod aoc_util {
         data.lines().map(str::to_string).collect()
     }
 
+    pub fn to_sectioned_string_vec(data: &String) -> Vec<String> {
+        data.split("\n\n").map(str::to_string).collect()
+    }
+
     pub fn to_int_vec(data: &String) -> Vec<i64> {
         data.lines().map(|s| s.parse().unwrap()).collect()
+    }
+
+    pub fn to_int_vec_radix<T: num::Integer>(data: &String, radix: u32) -> Vec<T> {
+        data.lines()
+            .flat_map(|s| T::from_str_radix(s, radix))
+            .collect()
     }
 
     pub fn run_and_time(f: &dyn Fn(&String) -> String, arg: &String) -> (Duration, String) {
@@ -52,7 +66,12 @@ pub mod aoc_util {
         let days: Vec<(
             &'static dyn Fn(&String) -> String,
             &'static dyn Fn(&String) -> String,
-        )> = vec![day_str!(one), day_str!(two)];
+        )> = vec![
+            day_str!(one),
+            day_str!(two),
+            day_str!(three),
+            day_str!(four),
+        ];
 
         let mut out = Vec::<[(Duration, String); 2]>::new();
 

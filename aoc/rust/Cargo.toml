@@ -8,3 +8,4 @@ default-run = "aoc2021"
 
 [dependencies]
 chrono = "0.4"
+num    = "0.4"
