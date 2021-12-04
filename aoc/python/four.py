@@ -37,11 +37,8 @@ class Board:
             if all(n.marked for n in row):
                 return True, f'won at row {i}, {row}'
 
-        for i, col in enumerate(self.columns()):
-            if all(n.marked for n in col):
-                return True, f'won at col {i}, {col}'
-
-        return False, ''
+        # for every column, if the column is all marked
+        return any(all(self.rows[r][c].marked for r in range(len(self.rows))) for c in range(len(self.rows[0]))), ''
 
     def numbers(self) -> list[BoardNumber]:
         return list(itertools.chain(*self.rows))
