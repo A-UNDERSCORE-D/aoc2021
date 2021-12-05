@@ -1,16 +1,50 @@
-from . import one, two, three, four, five
+from __future__ import annotations
+import traceback
+# from . import one, two, three, four, five
 from .util.human import time_call
-from typing import List
+from typing import Callable, List, TypeVar
 import sys
-
 import datetime
-TO_RUN = (
-    (one.part_1, one.part_2),
-    (two.part_1, two.part_2),
-    (three.part_1, three.part_2),
-    (four.part_1, four.part_2),
-    (five.part_1, five.part_2),
-)
+
+SHOW_TB = False
+
+
+def make_dummy(error: str) -> tuple[TEST_FUNC, TEST_FUNC]:
+    return (lambda _: error, lambda _: error)  # type: ignore
+
+
+_T = TypeVar('_T')
+TEST_FUNC = Callable[[str], _T]
+
+TO_RUN: list[tuple[TEST_FUNC, TEST_FUNC]] = []
+for n in ('one', 'two', 'three', 'four', 'five'):
+    to_set = None
+    try:
+        exec(f'from . import {n}', globals(), locals())
+        mod = globals()[n]
+        to_set = (mod.part_1, mod.part_2)
+
+    except (ImportError, SyntaxError) as e:
+        if SHOW_TB:
+            traceback.print_exc()
+
+        if isinstance(e, SyntaxError):
+            msg = f'{e.msg}: {n}.py:{e.lineno}: {str(e.text).strip()}'
+        else:
+            msg = str(e)
+
+        to_set = make_dummy(msg)
+
+    TO_RUN.append(to_set)  # type: ignore
+
+
+# TO_RUN: list[tuple[TEST_FUNC, TEST_FUNC]] = (
+#     (one.part_1, one.part_2),  # type: ignore
+#     (two.part_1, two.part_2),  # type: ignore
+#     (three.part_1, three.part_2),  # type: ignore
+#     (four.part_1, four.part_2),  # type: ignore
+#     (five.part_1, five.part_2),  # type: ignore
+# )
 
 
 def december_day() -> bool:

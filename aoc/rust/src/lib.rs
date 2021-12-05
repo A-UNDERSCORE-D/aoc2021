@@ -4,6 +4,7 @@ pub mod days {
     pub mod two;
     pub mod three;
     pub mod four;
+    pub mod five;
 }
 
 pub mod aoc_util {
@@ -71,6 +72,7 @@ pub mod aoc_util {
             day_str!(two),
             day_str!(three),
             day_str!(four),
+            day_str!(five),
         ];
 
         let mut out = Vec::<[(Duration, String); 2]>::new();

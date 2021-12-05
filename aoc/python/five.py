@@ -109,5 +109,5 @@ def part_2(input: str) -> int:
 
 
 if __name__ == '__main__':
-    l = LineSegment.from_str('9,7 -> 7,9')
-    print(l.plot_straight_line())
+    l = LineSegment.from_str('1,1 -> 5,5')
+    print(l.slope())
