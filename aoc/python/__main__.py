@@ -1,4 +1,4 @@
-from . import one, two, three, four
+from . import one, two, three, four, five
 from .util.human import time_call
 from typing import List
 import sys
@@ -9,6 +9,7 @@ TO_RUN = (
     (two.part_1, two.part_2),
     (three.part_1, three.part_2),
     (four.part_1, four.part_2),
+    (five.part_1, five.part_2),
 )
 
 
