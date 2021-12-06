@@ -29,15 +29,15 @@ SHOW_PROGRESS_MOD = -1
 
 
 def smarter_way(input_fish: list[int], days: int) -> int:
-    fish: dict[int, int] = {i: 0 for i in range(9)}
+    fish: list[int] = [0 for _ in range(9)]
     for f in input_fish:
         fish[f] += 1
 
     for iternum in range(days):
         # if SHOW_PROGRESS_MOD > 0 and iternum % SHOW_PROGRESS_MOD == 0:
         #     print(f'\rat {iternum}, {days - iternum} to go')
-        new_fish = {i: 0 for i in range(9)}
-        for day, count in fish.items():
+        new_fish = [0 for _ in range(9)]
+        for day, count in enumerate(fish):
             if day == 0:
                 new_fish[6] += count
                 new_fish[8] += count
@@ -53,7 +53,7 @@ def smarter_way(input_fish: list[int], days: int) -> int:
 
         fish = new_fish
 
-    return sum(fish.values())
+    return sum(fish)
     ...
 
 
