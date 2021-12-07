@@ -133,6 +133,19 @@ func Map[T any, U any](slice []T, pred func(T) U) []U {
 	return out
 }
 
+func MapChan[T any, U any](slice []T, pred func(T) U) <-chan U {
+	out := make(chan U)
+	go func() {
+		for _, v := range slice {
+			out <- pred(v)
+		}
+
+		close(out)
+	}()
+
+	return out
+}
+
 func Filter[T any](slice []T, pred func(T) bool) []T {
 	out := make([]T, 0, len(slice))
 	for _, v := range slice {
@@ -140,6 +153,21 @@ func Filter[T any](slice []T, pred func(T) bool) []T {
 			out = append(out, v)
 		}
 	}
+
+	return out
+}
+
+func FilterChan[T any](slice []T, pred func(T) bool) <-chan T {
+	out := make(chan T)
+	go func() {
+		for _, v := range slice {
+			if pred(v) {
+				out <- v
+			}
+		}
+
+		close(out)
+	}()
 
 	return out
 }
@@ -155,6 +183,21 @@ func Chain[T any](slices ...[]T) []T {
 	for _, s := range slices {
 		out = append(out, s...)
 	}
+
+	return out
+}
+
+func ChainChan[T any](slices ...[]T) <-chan T {
+	out := make(chan T)
+	go func() {
+		for _, s := range slices {
+			for _, v := range s {
+				out <- v
+			}
+		}
+
+		close(out)
+	}()
 
 	return out
 }
