@@ -158,3 +158,33 @@ func Chain[T any](slices ...[]T) []T {
 
 	return out
 }
+
+func Min[T Number](slice []T) T {
+	if len(slice) == 0 {
+		panic("attempt to min slice of length 0")
+	}
+	min := slice[0]
+
+	for _, v := range slice[1:] {
+		if v < min {
+			min = v
+		}
+	}
+
+	return min
+}
+
+func Max[T Number](slice []T) T {
+	if len(slice) == 0 {
+		panic("attempt to min slice of length 0")
+	}
+	max := slice[0]
+
+	for _, v := range slice[1:] {
+		if v > max {
+			max = v
+		}
+	}
+
+	return max
+}

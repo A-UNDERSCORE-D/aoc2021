@@ -1,6 +1,9 @@
 package util
 
-import "strconv"
+import (
+	"constraints"
+	"strconv"
+)
 
 func MustInt(s string) int {
 	res, err := strconv.Atoi(s)
@@ -9,4 +12,16 @@ func MustInt(s string) int {
 	}
 
 	return res
+}
+
+type Number interface {
+	constraints.Integer | constraints.Float
+}
+
+func Abs[T Number](a T) T {
+	if a > 0 {
+		return a
+	}
+
+	return -a
 }
