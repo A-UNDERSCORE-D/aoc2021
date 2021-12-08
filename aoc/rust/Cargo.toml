@@ -7,5 +7,6 @@ default-run = "aoc2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = "0.4"
-num    = "0.4"
+chrono    = "0.4"
+num       = "0.4"
+itertools = "0.8.2"

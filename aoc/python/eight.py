@@ -31,23 +31,8 @@ class Digit:
     raw_mapping: RAW_DIGIT
     char_mapping: str | None = None
 
-    def shared_faces(self, other) -> list[bool]:
-        return [x == y and x for (x, y) in zip(self.raw_mapping, other.raw_mapping)]
-
-    def __and__(self, __t: Digit) -> RAW_DIGIT:
-        return self.shared_faces(__t)
-
     def with_mapping(self, mapping: str) -> Digit:
         return Digit(self.number, self.raw_mapping.copy(), mapping)
-
-    def important_mapped_chars(self) -> list[str]:
-        if self.char_mapping is None:
-            raise ValueError
-
-        return [s for (s, b) in zip(self.char_mapping, self.raw_mapping) if b]
-
-    def str_rep(self):
-        return "".join([c for (i, c) in enumerate('abcdefg') if self.raw_mapping[i]])
 
     def mapped_str_rep(self):
         assert self.char_mapping is not None
@@ -71,37 +56,9 @@ DIGITS = [
     Digit(5, [True, True, False, True, False, True, True]),      # 5
     Digit(6, [True, True, False, True, True, True, True]),       # 6
     Digit(7, [True, False, True, False, False, True, False]),    # 7
-    Digit(8, [True, True, True, True, True, True, True, True]),  # 8
+    Digit(8, [True, True, True, True, True,  True, True]),  # 8
     Digit(9, [True, True, True, True, False, True, True]),       # 9
 ]
-
-assert(len(l.raw_mapping) == 7 for l in DIGITS)
-
-
-def print_digit(d: list[bool]):
-    def dot_or(idx: int) -> str:
-        if d[idx]:
-            return 'abcdefg'[idx]
-
-        return '.'
-
-    print(f'''
-     {dot_or(0)}{dot_or(0)}{dot_or(0)}{dot_or(0)}
-    {dot_or(1)}    {dot_or(2)}
-    {dot_or(1)}    {dot_or(2)}
-     {dot_or(3)}{dot_or(3)}{dot_or(3)}{dot_or(3)}
-    {dot_or(4)}    {dot_or(5)}
-    {dot_or(4)}    {dot_or(5)}
-     {dot_or(6)}{dot_or(6)}{dot_or(6)}{dot_or(6)}
-    ''')
-
-
-if __name__ == '__main__':
-    for (i, d) in enumerate(DIGITS):
-        print(i)
-        print_digit(d.raw_mapping)
-        print(d.str_rep())
-        print()
 
 
 TEST_INPUT = """be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
@@ -129,7 +86,6 @@ def parse_input(i: str) -> list[tuple[list[str], list[str]]]:
 
 
 def part_1(input: str) -> int:
-    # input = TEST_INPUT
     parsed = [FourDigitSegment(inp, out) for (inp, out) in parse_input(input)]
     return sum(p.part_1() for p in parsed)
 
@@ -186,6 +142,9 @@ class FourDigitSegment:
         e   f
         e   f
          ggg
+
+        abcdefg
+        0123456
         """
         char_mapping = {a: n for (a, n) in zip('abcdefg', chars)}
 
