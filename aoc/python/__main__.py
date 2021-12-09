@@ -17,7 +17,7 @@ _T = TypeVar('_T')
 TEST_FUNC = Callable[[str], _T]
 
 TO_RUN: list[tuple[TEST_FUNC, TEST_FUNC]] = []
-for n in ('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'):
+for n in ('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'):
     to_set = None
     try:
         exec(f'from . import {n}', globals(), locals())
