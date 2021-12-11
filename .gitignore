@@ -1,3 +1,4 @@
 aoc/input
 __pycache__
 .vscode
+out.*

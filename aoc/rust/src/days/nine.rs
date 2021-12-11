@@ -72,8 +72,15 @@ impl Grid {
     fn basins(&self) -> Vec<Vec<Point>> {
         let mut low_points = self.low_points();
         let mut basins = Vec::new();
+        basins.reserve(25000);
+        println!("basins starting");
 
+        let mut i = 0;
         while low_points.len() > 0 {
+            i += 1;
+            if i % 100 == 0 {
+                println!("{}", i);
+            }
             let basin = self.bfs_from(low_points.pop().unwrap());
             low_points = low_points
                 .into_iter()
@@ -138,7 +145,9 @@ pub fn part_1(input: &String) -> u32 {
     let input = parse(input);
 
     let low_points = input.low_points();
-    low_points.iter().map(|&x| input.at(x) as u32 + 1).sum()
+    let res = low_points.iter().map(|&x| input.at(x) as u32 + 1).sum();
+    println!("p1 {}", res);
+    res
 }
 
 pub fn part_2(input: &String) -> usize {
