@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/eleven"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/four"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/one"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/seven"
@@ -32,7 +33,7 @@ var SOLUTIONS = [][2]func(string) string{
 	{nil, nil},
 	{nil, nil},
 	{nil, nil},
-	{nil, nil},
+	{makeString(eleven.Solve1), makeString(eleven.Solve2)},
 	{makeString(twelve.Solve1), makeString(twelve.Solve2)},
 }
 
