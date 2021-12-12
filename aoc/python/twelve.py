@@ -107,7 +107,7 @@ def part_1(input: str) -> str:
     return f'{len(paths)}'
 
 
-def recursive_bfs(end: Node, paths: list[Node], current_path: list[Node], current_node: Node, p1) -> list[list[Node]]:
+def recursive_bfs(end: Node, paths: list[Node], current_path: list[Node], current_node: Node, p1: bool) -> list[list[Node]]:
     out: list[list[Node]] = []
     current_path.append(current_node)
     for neighbour in current_node.neighbours:
@@ -135,6 +135,7 @@ def recursive_bfs(end: Node, paths: list[Node], current_path: list[Node], curren
                     smalls[n.name] += 1
 
             if neighbour.small and any(c >= 2 for c in smalls.values()) and neighbour in current_path:
+                p1 = True
                 continue
 
         res = recursive_bfs(end, paths, current_path.copy(), neighbour, p1=p1)
