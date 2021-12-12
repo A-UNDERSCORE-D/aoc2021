@@ -10,6 +10,7 @@ import (
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/one"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/seven"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/six"
+	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/twelve"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/two"
 	"github.com/A-UNDERSCORE-D/aoc2021/aoc/go/util"
 )
@@ -28,6 +29,11 @@ var SOLUTIONS = [][2]func(string) string{
 	{nil, nil},
 	{makeString(six.Solve1), makeString(six.Solve2)},
 	{makeString(seven.Solve1), makeString(seven.Solve2)},
+	{nil, nil},
+	{nil, nil},
+	{nil, nil},
+	{nil, nil},
+	{makeString(twelve.Solve1), makeString(twelve.Solve2)},
 }
 
 func timeRun(f func(string) string, s string) (time.Duration, string) {

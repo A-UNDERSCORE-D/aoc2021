@@ -231,3 +231,13 @@ func Max[T Number](slice []T) T {
 
 	return max
 }
+
+func FindFunc[T any](slice []T, f func(T) bool) *T {
+	for _, v := range slice {
+		if f(v) {
+			return &v
+		}
+	}
+
+	return nil
+}
