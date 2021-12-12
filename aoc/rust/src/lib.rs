@@ -10,6 +10,8 @@ pub mod days {
     pub mod eight;
     pub mod nine;
     pub mod ten;
+    // pub mod eleven;
+    pub mod twelve;
 }
 
 pub mod aoc_util {
@@ -66,6 +68,16 @@ pub mod aoc_util {
         };
     }
 
+    fn skip_day(_: &String) -> String {
+        "Skipped!".to_string()
+    }
+
+    macro_rules! skip {
+        () => {
+            (&skip_day, &skip_day)
+        };
+    }
+
     pub fn run_puzzles(to_run: &Vec<usize>) -> Vec<[(Duration, String); 2]> {
         use crate::days;
 
@@ -83,6 +95,8 @@ pub mod aoc_util {
             day_str!(eight),
             day_str!(nine),
             day_str!(ten),
+            skip!(),
+            day_str!(twelve),
         ];
 
         let mut out = Vec::<[(Duration, String); 2]>::new();
