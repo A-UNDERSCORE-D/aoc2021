@@ -56,16 +56,18 @@ fn construct_graph(input: &String) -> Graph {
     g
 }
 
-fn recurse_bfs<'a>(
+fn recurse_bfs_small<'a>(
     current: &'a Node,
     graph: &'a Graph,
     source_path: &Vec<&'a Node<'_>>,
     part_1: bool,
-) -> Vec<Vec<&'a Node<'a>>> {
+) -> u128 {
     let mut part_1 = part_1;
     let mut current_path = source_path.clone();
     current_path.push(current);
     let mut out = Vec::new();
+
+    let mut num: u128 = 0;
 
     for &name in &current.others {
         let node = &graph[name];
@@ -95,28 +97,22 @@ fn recurse_bfs<'a>(
                 continue;
             }
         }
-
-        out.append(&mut recurse_bfs(
-            &graph[name],
-            graph,
-            &current_path.clone(),
-            part_1,
-        ))
+        num += recurse_bfs_small(&graph[name], graph, &current_path.clone(), part_1);
     }
 
-    out
+    num + (out.len() as u128)
 }
 
-pub fn part_1(input: &String) -> usize {
+pub fn part_1(input: &String) -> u128 {
     let g = construct_graph(input);
-    let paths = recurse_bfs(&g["start"], &g, &vec![], true);
+    let paths = recurse_bfs_small(&g["start"], &g, &vec![], true);
 
-    paths.len()
+    paths
 }
 
-pub fn part_2(input: &String) -> usize {
+pub fn part_2(input: &String) -> u128 {
     let g = construct_graph(input);
-    let paths = recurse_bfs(&g["start"], &g, &vec![], false);
+    let paths = recurse_bfs_small(&g["start"], &g, &vec![], false);
 
-    paths.len()
+    paths
 }

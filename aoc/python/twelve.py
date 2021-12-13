@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import DefaultDict, Dict
+from functools import lru_cache
 
 
 @dataclass
@@ -25,6 +26,9 @@ class Node:
 
     def __lt__(self, other):
         return self.name < other.name
+
+    def __hash__(self) -> int:
+        return self.name.__hash__()
 
 
 def create_graph(input: list[str]):
@@ -100,13 +104,6 @@ pj-fs
 start-RW"""
 
 
-def part_1(input: str) -> str:
-    graph = create_graph(input.splitlines())
-    paths = recursive_bfs(graph['end'], [], [], graph['start'], True)
-
-    return f'{len(paths)}'
-
-
 def recursive_bfs(end: Node, paths: list[Node], current_path: list[Node], current_node: Node, p1: bool) -> list[list[Node]]:
     out: list[list[Node]] = []
     current_path.append(current_node)
@@ -143,8 +140,53 @@ def recursive_bfs(end: Node, paths: list[Node], current_path: list[Node], curren
     return out
 
 
+@lru_cache(maxsize=2048)
+def recursive_bfs_fast(end: Node, paths: tuple[Node, ...], current_path: tuple[Node, ...], current_node: Node, p1: bool) -> int:
+    num = 0
+    current_path = current_path + (current_node,)
+    for neighbour in current_node.neighbours:
+        if neighbour == end:
+            num += 1
+            continue
+
+        if neighbour.name == 'start':
+            continue
+
+        if p1:
+            if neighbour.small and neighbour in current_path:
+                continue  # cant go over smalls twice
+
+        else:
+            """
+            In part 2, you may visit any single small cave twice.
+
+            To deal with that, if we have visited any small cave twice, we behave as normal
+            """
+            smalls: Dict[str, int] = DefaultDict(int)
+
+            for n in current_path:
+                if n.small:
+                    smalls[n.name] += 1
+
+            if neighbour.small and any(c >= 2 for c in smalls.values()) and neighbour in current_path:
+                p1 = True
+                continue
+
+        res = recursive_bfs_fast(end, paths, current_path, neighbour, p1=p1)
+        num += res
+
+    return num
+
+
+def part_1(input: str) -> str:
+    graph = create_graph(input.splitlines())
+    paths = recursive_bfs_fast(graph['end'], (), (), graph['start'], p1=True)
+
+    return f'{paths}'
+
+
 def part_2(input: str) -> str:
     graph = create_graph(input.splitlines())
-    paths = recursive_bfs(graph['end'], [], [], graph['start'], p1=False)
+    paths = recursive_bfs_fast(graph['end'], (), (), graph['start'], p1=False)
 
-    return f'{len(paths)}'
+    return f'{paths}'
