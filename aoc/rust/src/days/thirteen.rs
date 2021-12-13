@@ -66,12 +66,12 @@ fn fold(g: GRID, instruction: &Instruction) -> GRID {
     if instruction.along_x {
         let left = g
             .iter()
-            .map(|r| (&r[(instruction.num + 1)..]).to_vec())
+            .map(|r| (&r[..instruction.num]).to_vec())
             .collect_vec();
         let right = g
             .iter()
             .map(|r| {
-                let mut v = (&r[..instruction.num]).to_vec();
+                let mut v = (&r[(instruction.num + 1)..]).to_vec();
                 v.reverse();
                 v
             })
@@ -107,12 +107,6 @@ pub fn part_2(input: &String) -> usize {
     for i in &instructions {
         g = fold(g.clone(), i);
     }
-
-    // No I dont know why its reversed
-    g = g
-        .iter()
-        .map(|x| ((*x).clone()).into_iter().rev().collect_vec())
-        .collect_vec();
 
     print_grid(&g);
 
