@@ -1,11 +1,12 @@
 from __future__ import annotations
-from dataclasses import dataclass
 from typing import TYPE_CHECKING
+
+import heapq
 
 from .util import direction
 
 if TYPE_CHECKING:
-    GRID = list[list[int]]
+    POINT = tuple[int, int]
 
 TEST_DATA = """1163751742
 1381373672
@@ -19,104 +20,118 @@ TEST_DATA = """1163751742
 2311944581"""
 
 
-def parse(input: str) -> GRID:
-    return [[int(c) for c in row] for row in input.splitlines()]
+def parse_graph(input: str) -> dict[POINT, int]:
+    d = {}
+    for row, r in enumerate(input.splitlines()):
+        for col, c in enumerate(r):
+            d[(row, col)] = int(c)
+
+    return d
 
 
-@dataclass(frozen=True)
-class DirEntry:
-    position: tuple[int, int]
-    weight: int
+def dj(graph: dict[POINT, int], start: POINT, end: POINT):
+    heap: list[tuple[int, POINT]] = []
+    seen: set[POINT] = set()
+    seen.add(start)
 
-    def __repr__(self) -> str:
-        return f'({self.position[0]}, {self.position[1]})'
+    def safe_dirs(s: POINT) -> list[POINT]:
+        out = []
+        for d in direction.CARDINAL:
+            new_point = (s[0] + d[0], s[1]+d[1])
 
+            if new_point in graph:
+                out.append(new_point)
 
-def safe_directions(g: GRID, start: DirEntry, diagonal=False) -> list[DirEntry]:
-    out = []
+        return out
 
-    start_row, start_col = start.position
-    for d in direction.CARDINAL:
-        delta_row, delta_col = d
+    heapq.heappush(heap, (0, start))
 
-        row = start_row + delta_row
-        col = start_col + delta_col
-        if row >= len(g) or row < 0:
+    i = 0
+    while heap:
+        i += 1
+        if i % 30000 == 0:
+            print(len(heap), len(seen))
+
+        cost, point = heapq.heappop(heap)
+        if point in seen and len(seen) > 1:
             continue
 
-        if col >= len(g[0]) or col < 0:
-            continue
+        seen.add(point)
 
-        out.append(DirEntry((row, col), g[row][col]))
+        if point == end:
+            return cost
+
+        for dir in safe_dirs(point):
+            if dir not in seen:
+                heapq.heappush(heap, (cost+graph[dir], dir))
+
+    return "?????"
+
+
+def correct_add(a: int, b: int) -> int:
+    out = a
+    for _ in range(b):
+        if out > 9:
+            out = 1
+        out += 1
+
+    if out > 9:
+        out = 1
 
     return out
 
 
-BEST_PATH_SCORE = 1e10
-TOTAL_CALLS = 0
+def make_larger_graph(input: str) -> tuple[dict[POINT, int], POINT]:
+    l = [[int(c) for c in r] for r in input.splitlines()]
+    out_l: list[list[int]] = []
 
-"""
-Cache by:
-    storing the best path from a given position to the target
-    checking if we have a cached route from a given position to the target
-"""
-CACHE: dict[DirEntry, tuple[list[DirEntry], int]] = {}
+    for row in l:
+        out_row: list[int] = []
+        for i in range(5):
+            out_row.extend(correct_add(c, i) for c in row)
 
+        out_l.append(out_row)
 
-def recurse_dj(g: GRID, current_path: list[DirEntry], current_weight, current_node: DirEntry, target_position: DirEntry, depth: int) -> tuple[list[DirEntry], int]:
-    global BEST_PATH_SCORE, TOTAL_CALLS
-    TOTAL_CALLS += 1
-    path = current_path + [current_node]
+    # okay, all 5 left to right done, now top to bottom
+    start_len = len(out_l)
+    for i in range(1, 5):
+        for r_i in range(start_len):
+            out_l.append([correct_add(c, i) for c in out_l[r_i]])
 
-    dirs_to_check = safe_directions(g, current_node)
-    path_sum = current_weight + current_node.weight
+    out = {}
 
-    # dirs_to_check.sort(key=lambda d: d.weight)
-    dirs_to_check.sort(key=lambda d: d.position, reverse=True)  # prefer down and right
+    for row_idx, r in enumerate(out_l):
+        for col, c in enumerate(r):
+            out[(row_idx, col)] = c
 
-    results: list[tuple[list[DirEntry], int]] = []
-    for d in dirs_to_check:
-        if d in path:
-            # we've been here! skip!
-            continue
+    L = out_l
 
-        if d == target_position:
-            # base case, found the bottom
-            results.append((path + [d], path_sum + d.weight))
-            continue
-
-        if not path_sum + d.weight < BEST_PATH_SCORE:
-            # going this way doesnt help us
-            continue
-
-        # we didnt find the target, keep going down
-        r = recurse_dj(g, path, path_sum, d, target_position, depth+1)
-        if r[1] == -1:
-            continue
-
-        results.append(r)
-
-    # results = [r for r in results if r[0]]
-
-    if not results:
-        return [], -1
-
-    best_result = sorted(results, key=lambda r: r[1])[0]
-    if not best_result:
-        return [], -1
-
-    if best_result[1] <= BEST_PATH_SCORE and best_result[1] > 0:
-        # print(f'{best_result[1]} <= {BEST_PATH_SCORE} [{depth}]')
-        BEST_PATH_SCORE = best_result[1]
-        return best_result
-
-    return [], -1
+    return (out, (len(out_l)-1, len(out_l[0])-1))
 
 
-def print_path(g: GRID, p: list[DirEntry]):
+# from functools import ca
+
+
+def cost_at(g: dict[POINT, int], max_row: int, max_col: int, row: int, col: int) -> int:
+    original_coords = ((row % (max_row+1)), (col % (max_col+1)))
+
+    off_row = row // (max_row+1)
+    off_col = col // (max_col+1)
+    original_cost = g[original_coords]
+
+    cost = original_cost
+    for i in range(max(off_row, off_col)):
+        if cost == 9:
+            cost = 1
+        cost += 1
+
+    return cost
+
+
+def print_path(g: list[list[int]], p: list[POINT]):
     for row, l in enumerate(g):
         for col, n in enumerate(l):
-            if DirEntry((row, col), n) in p:
+            if (row, col) in p:
                 print(f'\033[1m{n}\033[m', end='')
 
             else:
@@ -125,36 +140,15 @@ def print_path(g: GRID, p: list[DirEntry]):
         print()
 
 
-def part_1(input: str) -> str:
+def part_1(input: str) -> int | str:
     # input = TEST_DATA
-    parsed = parse(input)
-    print(len(parsed), len(parsed[0]))
-    # compute A score that is something to start with so the algo goes a bit faster:
-    start_path = []
-    for row in range(len(parsed)):
-        start_path.append(DirEntry((row, row), parsed[row][row]))
+    graph = parse_graph(input)
 
-    # for col in range(1, len(parsed[0])):
-    #     start_path.append(DirEntry((len(parsed)-1, col), parsed[-1][col]))
-
-    print_path(parsed, start_path)
-    assert len(set(start_path)) == len(start_path)
-    global BEST_PATH_SCORE
-    BEST_PATH_SCORE = sum(n.weight for n in start_path[1:])
-
-    start = DirEntry((0, 0), parsed[0][0])
-    end = DirEntry((len(parsed)-1, len(parsed[0])-1), parsed[-1][-1])
-
-    # result = recurse_dj(parsed, [], -end.weight, end, start, 0)
-    result = recurse_dj(parsed, [], -start.weight, start, end, 0)
-    s = result[1]
-    print(result)
-    # print(s)
-
-    print_path(parsed, result[0])
-
-    return f'{s} -- {TOTAL_CALLS}'
+    return dj(graph, (0, 0), (len(input.splitlines())-1, len(input.splitlines()[0])-1))
 
 
-def part_2(input: str) -> str:
-    return ''
+def part_2(input: str) -> int | str:
+    # input = TEST_DATA
+    graph, end = make_larger_graph(input)
+
+    return dj(graph, (0, 0), end)

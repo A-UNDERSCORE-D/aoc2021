@@ -17,7 +17,10 @@ _T = TypeVar('_T')
 TEST_FUNC = Callable[[str], _T]
 
 TO_RUN: list[tuple[TEST_FUNC, TEST_FUNC]] = []
-for n in ('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen'):
+for n in (
+    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+    'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen'
+):
     to_set = None
     try:
         exec(f'from . import {n}', globals(), locals())
@@ -67,8 +70,9 @@ def parse_args(args: List[str]) -> List[int]:
 
 
 if __name__ == '__main__':
-
+    from pathlib import Path
     requested = parse_args(sys.argv)
+    input_dir = Path(__file__).parent.parent / 'input'
 
     for day in requested:
         if len(TO_RUN) <= day-1:
@@ -78,7 +82,8 @@ if __name__ == '__main__':
             continue
 
         p1, p2 = TO_RUN[day-1]
-        with open(f'input/{day:02}.input') as f:
+
+        with open(input_dir / f'{day:02}.input') as f:
             input = f.read()
 
         time, res = time_call(p1, input)
