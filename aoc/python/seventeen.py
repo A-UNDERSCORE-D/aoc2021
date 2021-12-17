@@ -76,8 +76,8 @@ def part_1(input: str) -> str:
     x_range = list(range(min(xrange), max(xrange))) + [max(xrange)]
     y_range = list(range(min(yrange), max(yrange))) + [max(yrange)]
 
-    for x in range(min(xrange)-256, max(xrange)):
-        for y in range(0, 256):
+    for x in range(0, max(xrange)+1):
+        for y in range(0, 100):
             positions, ok = simulate((0, 0), (x, y), x_range, y_range)
             if not ok:
                 continue
@@ -102,8 +102,8 @@ def part_2(input: str) -> str:
     y_range = list(range(min(yrange), max(yrange))) + [max(yrange)]
 
     vels = []
-    for x in range(min(xrange)-256, max(xrange)+100):
-        for y in range(min(yrange), max(yrange)+256):
+    for x in range(0, max(xrange)+1):
+        for y in range(min(yrange), max(yrange)+150):
             positions, ok = simulate((0, 0), (x, y), x_range, y_range)
             if not ok:
                 continue
