@@ -59,6 +59,7 @@ def dj(graph: dict[POINT, int], start: POINT, end: POINT):
         seen.add(point)
 
         if point == end:
+            print(f'{i} iterations, {len(heap)=}, {len(seen)=}')
             return cost
 
         for dir in safe_dirs(point):

@@ -19,7 +19,8 @@ TEST_FUNC = Callable[[str], _T]
 TO_RUN: list[tuple[TEST_FUNC, TEST_FUNC]] = []
 for n in (
     'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
-    'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen'
+    'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    'seventeen',
 ):
     to_set = None
     try:
