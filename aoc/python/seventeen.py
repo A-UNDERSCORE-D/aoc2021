@@ -59,7 +59,6 @@ def simulate(start: tuple[int, int], velocity_start: tuple[int, int], x_area: li
 
 
 def part_1(input: str) -> str:
-    # input = 'target area: x=20..30, y=-10..-5'
     target_range = input.split(': ')[1]
     xrange_s, yrange_s = target_range.split(', ')
 
