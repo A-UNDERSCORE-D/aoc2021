@@ -83,7 +83,6 @@ def explode_pair(lst: list[Any]) -> bool:
             c[0] = new_left
 
     if new_right != -1:
-        # new_right
         c = lst
         for p in depths_r[0]:
             c = c[p]

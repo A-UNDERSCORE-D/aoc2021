@@ -20,7 +20,7 @@ TO_RUN: list[tuple[TEST_FUNC, TEST_FUNC]] = []
 for n in (
     'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
     'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
-    'seventeen', 'eighteen',
+    'seventeen', 'eighteen', 'nineteen', 'twenty',
 ):
     to_set = None
     try:
